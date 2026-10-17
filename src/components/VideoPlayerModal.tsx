@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { VideoBrief } from '../data/careerData';
-import { X, Play, Pause, RotateCcw, Volume2, VolumeX, Maximize2, CheckCircle2, Bookmark, FastForward } from 'lucide-react';
+import { X, CheckCircle2, Bookmark, ExternalLink, RefreshCw, AlertCircle, Loader2 } from 'lucide-react';
 
 interface VideoPlayerModalProps {
   video: VideoBrief | null;
@@ -9,207 +9,173 @@ interface VideoPlayerModalProps {
 }
 
 export const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({ video, onClose, onBookmarkTakeaway }) => {
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [isMuted, setIsMuted] = useState(false);
-  const [playbackSpeed, setPlaybackSpeed] = useState<number>(1);
   const [activeTab, setActiveTab] = useState<'chapters' | 'takeaways' | 'transcript'>('chapters');
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const [startTime, setStartTime] = useState<number>(0);
+  const [embedKey, setEmbedKey] = useState<number>(0);
 
   useEffect(() => {
     if (!video) return;
-    setCurrentTime(0);
-    setIsPlaying(true);
+    setIsLoading(true);
+    setHasError(false);
+    setStartTime(0);
+    setEmbedKey((k) => k + 1);
   }, [video]);
-
-  // Video playback simulation timer
-  useEffect(() => {
-    if (!video) return;
-
-    if (isPlaying) {
-      timerRef.current = setInterval(() => {
-        setCurrentTime((prev) => {
-          if (prev >= video.durationSeconds) {
-            setIsPlaying(false);
-            return video.durationSeconds;
-          }
-          return prev + 1;
-        });
-      }, 1000 / playbackSpeed);
-    } else if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [isPlaying, playbackSpeed, video]);
 
   if (!video) return null;
 
-  const formatSeconds = (sec: number) => {
-    const mins = Math.floor(sec / 60);
-    const remainder = Math.floor(sec % 60);
-    return `${mins}:${remainder < 10 ? '0' : ''}${remainder}`;
-  };
-
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentTime(Number(e.target.value));
+  const parseChapterSeconds = (timeStr: string) => {
+    const [m, s] = timeStr.split(':').map(Number);
+    return (m || 0) * 60 + (s || 0);
   };
 
   const handleJumpToChapter = (timeStr: string) => {
-    const [m, s] = timeStr.split(':').map(Number);
-    const targetSeconds = m * 60 + s;
-    setCurrentTime(targetSeconds);
-    setIsPlaying(true);
+    const seconds = parseChapterSeconds(timeStr);
+    setStartTime(seconds);
+    setIsLoading(true);
+    setHasError(false);
+    setEmbedKey((k) => k + 1);
   };
 
-  const parseChapterSeconds = (timeStr: string) => {
-    const [m, s] = timeStr.split(':').map(Number);
-    return m * 60 + s;
+  const handleRetry = () => {
+    setIsLoading(true);
+    setHasError(false);
+    setEmbedKey((k) => k + 1);
   };
 
-  // Determine current active chapter
-  const currentChapter = [...video.chapters]
-    .reverse()
-    .find((ch) => currentTime >= parseChapterSeconds(ch.time)) || video.chapters[0];
+  // Construct secure embed URL
+  const originParam = typeof window !== 'undefined' ? `&origin=${encodeURIComponent(window.location.origin)}` : '';
+  const embedUrl = `https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&enablejsapi=1&rel=0${startTime > 0 ? `&start=${startTime}` : ''}${originParam}`;
+  const directWatchUrl = `https://www.youtube.com/watch?v=${video.youtubeId}${startTime > 0 ? `&t=${startTime}s` : ''}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-      <div className="relative w-full max-w-5xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={video.title}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md"
+    >
+      <div className="relative w-full max-w-5xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
         {/* Modal Top Bar */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/60">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono font-semibold text-cyan-400 bg-cyan-950/50 border border-cyan-800/60 px-2 py-0.5 rounded">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-950/70">
+          <div className="flex items-center gap-2.5 truncate pr-3">
+            <span className="text-xs font-mono font-semibold text-cyan-400 bg-cyan-950/50 border border-cyan-800/60 px-2 py-0.5 rounded shrink-0 tabular-nums">
               {video.durationFormatted} Curated Brief
             </span>
-            <span className="text-sm font-semibold text-white truncate max-w-md">
+            <span className="text-sm font-semibold text-white truncate font-display">
               {video.title}
             </span>
           </div>
 
-          <button
-            onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
-            aria-label="Close video player"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <a
+              href={directWatchUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 text-xs text-slate-400 hover:text-cyan-300 hover:bg-slate-800/80 rounded transition-colors"
+              title="Open video on YouTube"
+            >
+              <span>Watch on YouTube</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+
+            <button
+              onClick={onClose}
+              className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+              aria-label="Close video player"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Player Layout (Split between Video Stage and Content Deck) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 overflow-y-auto flex-1">
           {/* Video Stage Column */}
-          <div className="lg:col-span-8 flex flex-col bg-black/90">
-            {/* Screen / Canvas Area */}
-            <div className="relative w-full aspect-video bg-slate-950 flex items-center justify-center overflow-hidden group">
-              <img
-                src={video.thumbnail}
-                alt={video.title}
-                className="w-full h-full object-cover opacity-60"
-                referrerPolicy="no-referrer"
-              />
-
-              {/* Dynamic waveform / simulated playback HUD */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30" />
-
-              {/* Speaker info watermark */}
-              <div className="absolute top-4 left-4 flex items-center gap-2 p-2 rounded-lg bg-slate-900/80 backdrop-blur-sm border border-slate-800 text-xs text-slate-300">
-                <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                <span className="font-semibold text-white">{video.speaker}</span>
-                <span className="text-slate-500">·</span>
-                <span className="text-slate-400">{video.speakerRole}</span>
-              </div>
-
-              {/* Active Chapter Overlay */}
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="text-[11px] font-mono text-cyan-400 uppercase tracking-wider mb-1">
-                  Current Chapter
+          <div className="lg:col-span-8 flex flex-col bg-black">
+            {/* Embed Viewport Container */}
+            <div className="relative w-full aspect-video bg-slate-950 flex items-center justify-center overflow-hidden">
+              {/* Loading Indicator */}
+              {isLoading && !hasError && (
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-slate-950/90 text-slate-300 gap-3">
+                  <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+                  <span className="text-xs font-medium tracking-wide">
+                    Loading verified video brief...
+                  </span>
                 </div>
-                <div className="text-base font-bold text-white font-display drop-shadow">
-                  {currentChapter.title}
-                </div>
-              </div>
+              )}
 
-              {/* Centered big play button when paused */}
-              {!isPlaying && (
-                <button
-                  onClick={() => setIsPlaying(true)}
-                  className="absolute z-10 w-16 h-16 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center hover:scale-105 transition-transform shadow-lg shadow-cyan-900/50"
-                  aria-label="Play video"
-                >
-                  <Play className="w-7 h-7 fill-slate-950 ml-1" />
-                </button>
+              {/* Error / Fallback State */}
+              {hasError ? (
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 text-center bg-slate-950 text-slate-300 gap-3">
+                  <AlertCircle className="w-10 h-10 text-amber-400" />
+                  <div className="text-sm font-semibold text-white">Video playback issue detected</div>
+                  <p className="text-xs text-slate-400 max-w-sm">
+                    Your browser or ad-blocker may restrict embedded video players. You can watch the full verified brief directly on YouTube.
+                  </p>
+                  <div className="flex items-center gap-3 mt-2">
+                    <button
+                      onClick={handleRetry}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-200 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" />
+                      <span>Retry</span>
+                    </button>
+                    <a
+                      href={directWatchUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-slate-950 bg-cyan-400 rounded-lg hover:bg-cyan-300 transition-colors"
+                    >
+                      <span>Open on YouTube</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <iframe
+                  key={`${video.youtubeId}-${embedKey}`}
+                  src={embedUrl}
+                  title={video.title}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  onLoad={() => setIsLoading(false)}
+                  onError={() => {
+                    setIsLoading(false);
+                    setHasError(true);
+                  }}
+                />
               )}
             </div>
 
-            {/* Custom Video Controls Deck */}
-            <div className="p-4 bg-slate-950 border-t border-slate-800/80 space-y-3">
-              {/* Scrub Slider with Chapter Dots */}
-              <div className="relative flex items-center">
-                <input
-                  type="range"
-                  min={0}
-                  max={video.durationSeconds}
-                  value={currentTime}
-                  onChange={handleSeek}
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
-                />
+            {/* Video Sub-bar / Speaker & Fallback Link */}
+            <div className="p-3.5 bg-slate-950 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2 text-slate-300">
+                <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                <span className="font-semibold text-white">{video.speaker}</span>
+                <span className="text-slate-500">·</span>
+                <span className="text-slate-400 truncate">{video.speakerRole}</span>
               </div>
 
-              {/* Control Buttons Row */}
-              <div className="flex items-center justify-between text-xs text-slate-400">
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => setIsPlaying(!isPlaying)}
-                    className="p-1.5 text-white hover:text-cyan-400 transition-colors"
-                    aria-label={isPlaying ? 'Pause' : 'Play'}
-                  >
-                    {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-white" />}
-                  </button>
-
-                  <button
-                    onClick={() => setCurrentTime(0)}
-                    className="p-1.5 text-slate-400 hover:text-white transition-colors"
-                    title="Restart from beginning"
-                  >
-                    <RotateCcw className="w-4 h-4" />
-                  </button>
-
-                  <div className="font-mono tabular-nums text-slate-300">
-                    {formatSeconds(currentTime)} / {video.durationFormatted}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  {/* Speed selector */}
-                  <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded px-1.5 py-0.5">
-                    {[1, 1.25, 1.5].map((speed) => (
-                      <button
-                        key={speed}
-                        onClick={() => setPlaybackSpeed(speed)}
-                        className={`px-1.5 py-0.5 text-[11px] font-mono rounded ${
-                          playbackSpeed === speed ? 'bg-cyan-500/20 text-cyan-300 font-bold' : 'text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        {speed}x
-                      </button>
-                    ))}
-                  </div>
-
-                  <button
-                    onClick={() => setIsMuted(!isMuted)}
-                    className="p-1 text-slate-400 hover:text-white"
-                  >
-                    {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4" />}
-                  </button>
-                </div>
+              <div className="flex items-center gap-3 text-slate-400">
+                <a
+                  href={directWatchUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300 transition-colors"
+                >
+                  <span>Direct YouTube Link</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </div>
             </div>
           </div>
 
           {/* Right Column: Chapters, Key Takeaways & Transcript */}
-          <div className="lg:col-span-4 p-6 bg-slate-900/90 border-t lg:border-t-0 lg:border-l border-slate-800 flex flex-col justify-between">
+          <div className="lg:col-span-4 p-5 sm:p-6 bg-slate-900/90 border-t lg:border-t-0 lg:border-l border-slate-800 flex flex-col justify-between">
             <div>
               {/* Tab Selector */}
               <div className="flex items-center gap-2 border-b border-slate-800 pb-3 mb-5">
@@ -249,17 +215,17 @@ export const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({ video, onClo
               {activeTab === 'chapters' && (
                 <div className="space-y-2">
                   <div className="text-[11px] text-slate-400 mb-2">
-                    Click any chapter to jump directly to that section:
+                    Click any chapter to jump directly to that timestamp in the video:
                   </div>
                   {video.chapters.map((ch, idx) => {
                     const chSeconds = parseChapterSeconds(ch.time);
-                    const isActive = currentChapter.time === ch.time;
+                    const isCurrent = startTime === chSeconds;
                     return (
                       <button
                         key={idx}
                         onClick={() => handleJumpToChapter(ch.time)}
                         className={`w-full text-left p-3 rounded-lg border flex items-center justify-between gap-3 transition-colors ${
-                          isActive
+                          isCurrent
                             ? 'bg-cyan-950/40 border-cyan-500/60 text-white'
                             : 'bg-slate-950/40 border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white'
                         }`}
@@ -309,7 +275,7 @@ export const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({ video, onClo
               {activeTab === 'transcript' && (
                 <div className="space-y-3">
                   <div className="text-[11px] text-slate-400 mb-2">
-                    Verified speaker audio transcript:
+                    Verified speaker audio transcript excerpt:
                   </div>
                   <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-xs text-slate-300 leading-relaxed max-h-60 overflow-y-auto">
                     <p className="italic text-slate-400 mb-2">
@@ -326,7 +292,7 @@ export const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({ video, onClo
 
             {/* Bottom summary note */}
             <div className="pt-4 border-t border-slate-800 text-xs text-slate-500">
-              Curated exclusively for Career Lens · No filler, 100% practitioner insights
+              Curated for Career Lens · Verified 3–4 minute educational brief
             </div>
           </div>
         </div>

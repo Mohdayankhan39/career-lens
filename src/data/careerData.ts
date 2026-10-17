@@ -35,6 +35,8 @@ export interface VideoBrief {
   speakerRole: string;
   summary: string;
   thumbnail: string;
+  youtubeId: string;
+  youtubeEmbedUrl: string;
   chapters: { time: string; title: string }[];
   takeaways: string[];
   transcriptExcerpt: string;
@@ -323,6 +325,8 @@ export const CURATED_VIDEOS: VideoBrief[] = [
     speaker: 'Elena Vance, Ph.D.',
     speakerRole: 'Principal Hardware Architect, Silicon Systems',
     thumbnail: '/src/assets/images/field_computer_engineering_1792243242347.jpg',
+    youtubeId: 'g8Qav3vIv9s',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/g8Qav3vIv9s',
     summary: 'A fast-paced 3-minute 45-second insider view into how computer engineers bridge microarchitectural RTL code with nanometer physical silicon fabrication.',
     chapters: [
       { time: '0:00', title: 'Silicon Abstraction Layers' },
@@ -346,6 +350,8 @@ export const CURATED_VIDEOS: VideoBrief[] = [
     speaker: 'Marcus Sterling',
     speakerRole: 'VP of Infrastructure & Systems Engineering',
     thumbnail: '/src/assets/images/field_it_software_engineering_1792243244045.jpg',
+    youtubeId: 'eGX_42qSofc',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/eGX_42qSofc',
     summary: 'Clear 3-minute comparison distinguishing low-level hardware/firmware computer engineering from high-scale cloud and distributed IT systems.',
     chapters: [
       { time: '0:00', title: 'The Core Mental Model Difference' },
@@ -369,6 +375,8 @@ export const CURATED_VIDEOS: VideoBrief[] = [
     speaker: 'Dr. Sarah Al-Mansoor, MD',
     speakerRole: 'Attending Physician & Robotic Surgery Specialist',
     thumbnail: '/src/assets/images/field_medical_doctor_1792243243377.jpg',
+    youtubeId: 'U0zf9SEavmw',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/U0zf9SEavmw',
     summary: 'A 4-minute clinical walkthrough showing what contemporary medicine looks like with computer-assisted surgery, rapid biometrics, and bedside empathy.',
     chapters: [
       { time: '0:00', title: 'Morning Triage & ICU Telemetry' },
@@ -392,6 +400,8 @@ export const CURATED_VIDEOS: VideoBrief[] = [
     speaker: 'Priya Raman',
     speakerRole: 'Principal Cloud Architect, Global SRE',
     thumbnail: '/src/assets/images/hero_career_lens_1792243242270.jpg',
+    youtubeId: 'Y-Jhlwy2sW4',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/Y-Jhlwy2sW4',
     summary: 'Learn the 4 core pillars of enterprise cloud engineering: elasticity, observability, failure isolation, and zero-trust security.',
     chapters: [
       { time: '0:00', title: 'Why Monoliths Fail at Scale' },
@@ -415,6 +425,8 @@ export const CURATED_VIDEOS: VideoBrief[] = [
     speaker: 'Julian Chen',
     speakerRole: 'Lead Robotics Firmware Architect',
     thumbnail: '/src/assets/images/field_computer_engineering_1792243242347.jpg',
+    youtubeId: 'cdQNj4BoXjI',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/cdQNj4BoXjI',
     summary: 'Discover how embedded microcontrollers compute motor control algorithms under strict real-time deadline guarantees.',
     chapters: [
       { time: '0:00', title: 'Hard Real-Time Systems' },
@@ -438,6 +450,8 @@ export const CURATED_VIDEOS: VideoBrief[] = [
     speaker: 'Dr. Christian Bennett, MD',
     speakerRole: 'Medical Education Director & Pediatric Surgeon',
     thumbnail: '/src/assets/images/field_medical_doctor_1792243243377.jpg',
+    youtubeId: 'mu5WzOL8-O8',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/mu5WzOL8-O8',
     summary: 'Essential study strategies, clinical memory frameworks, and mental stamina habits for prospective and current medical students.',
     chapters: [
       { time: '0:00', title: 'The Information Firehose' },
