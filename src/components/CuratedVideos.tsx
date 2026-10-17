@@ -84,6 +84,9 @@ export const CuratedVideos: React.FC<CuratedVideosProps> = ({ onSelectVideo }) =
                   alt={video.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-80 group-hover:opacity-100"
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.src = `https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg`;
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
 

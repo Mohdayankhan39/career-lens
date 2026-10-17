@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, Play, LineChart, Award, GraduationCap, Video } from 'lucide-react';
+import heroImg from '../assets/images/hero_career_lens_1792243242270.jpg';
 
 interface HeroSectionProps {
   onStartAssessment: () => void;
@@ -78,10 +79,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="lg:col-span-5">
             <div className="relative rounded-2xl overflow-hidden border border-slate-800 bg-slate-900/60 shadow-2xl">
               <img
-                src="/src/assets/images/hero_career_lens_1792243242270.jpg"
+                src={heroImg}
                 alt="Professional mapping multidimensional career trajectories on glass interface"
                 className="w-full h-[400px] lg:h-[460px] object-cover"
                 referrerPolicy="no-referrer"
+                onError={(e) => {
+                  e.currentTarget.src = '/assets/images/hero_career_lens_1792243242270.jpg';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
               

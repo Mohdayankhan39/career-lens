@@ -59,6 +59,18 @@ export const TrendingDegrees: React.FC<TrendingDegreesProps> = ({ onSelectDegree
                     alt={currentDegree.name}
                     className="w-full h-52 object-cover"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      // Fallback to static public path if needed
+                      if (currentDegree.id === 'computer-engineering') {
+                        e.currentTarget.src = '/assets/images/field_computer_engineering_1792243242347.jpg';
+                      } else if (currentDegree.id === 'it-software-engineering') {
+                        e.currentTarget.src = '/assets/images/field_it_software_engineering_1792243244045.jpg';
+                      } else if (currentDegree.id === 'medicine-doctor') {
+                        e.currentTarget.src = '/assets/images/field_medical_doctor_1792243243377.jpg';
+                      } else {
+                        e.currentTarget.src = '/assets/images/hero_career_lens_1792243242270.jpg';
+                      }
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                   <div className="absolute bottom-3 left-3 right-3 text-xs text-white font-medium">
