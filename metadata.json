@@ -1,0 +1,6 @@
+{
+  "name": "Career Lens",
+  "description": "Professional growth mapping, personalized skill assessments, industry trend analysis, trending degrees, and curated 3-4 minute career videos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
