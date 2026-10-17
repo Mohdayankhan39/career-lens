@@ -32,6 +32,7 @@ export interface DegreePath {
 
 export interface VideoBrief {
   id: string;
+  degreeId: string;
   title: string;
   degreeCategory: string;
   durationSeconds: number; // between 180 and 245 seconds (3 to 4 mins)
@@ -321,8 +322,10 @@ export const TRENDING_DEGREES: DegreePath[] = [
 ];
 
 export const CURATED_VIDEOS: VideoBrief[] = [
+  // Computer Engineering Videos
   {
     id: 'vid-comp-eng-silicon',
+    degreeId: 'computer-engineering',
     title: 'Inside Computer Engineering: Designing 3nm Silicon Chips',
     degreeCategory: 'Computer Engineering',
     durationSeconds: 225, // 3:45
@@ -347,82 +350,8 @@ export const CURATED_VIDEOS: VideoBrief[] = [
     transcriptExcerpt: "When you type code into a terminal, thousands of logic gates fire within picoseconds. As computer engineers, our job is not just to run code, but to physically sculpt the silicon pathways that make computation energy-efficient. In this brief, we break down why the hardware renaissance is happening right now..."
   },
   {
-    id: 'vid-it-vs-computer-eng',
-    title: 'IT vs Computer Engineering: Which Degree Matches Your Brain?',
-    degreeCategory: 'Information Technology',
-    durationSeconds: 198, // 3:18
-    durationFormatted: '3:18',
-    speaker: 'Marcus Sterling',
-    speakerRole: 'VP of Infrastructure & Systems Engineering',
-    thumbnail: itSoftwareImg,
-    youtubeId: 'eGX_42qSofc',
-    youtubeEmbedUrl: 'https://www.youtube.com/embed/eGX_42qSofc',
-    summary: 'Clear 3-minute comparison distinguishing low-level hardware/firmware computer engineering from high-scale cloud and distributed IT systems.',
-    chapters: [
-      { time: '0:00', title: 'The Core Mental Model Difference' },
-      { time: '1:05', title: 'The Daily Work: Chips vs Clusters' },
-      { time: '2:15', title: 'Career Trajectories & Comp Curves' },
-      { time: '2:50', title: 'How to Decide Your Major' }
-    ],
-    takeaways: [
-      'Choose Computer Engineering if you love physical hardware, physics, circuits, and low-level firmware.',
-      'Choose IT / Software Engineering if you love cloud architecture, distributed microservices, databases, and rapid shipping.',
-      'Both fields intersect at edge computing and hardware acceleration platforms.'
-    ],
-    transcriptExcerpt: "Students frequently ask: 'Should I study Computer Engineering or IT and Software Systems?' The simple test is whether you want to manipulate physical voltage and silicon registers, or orchestrate global distributed fleets serving millions of concurrent web sockets..."
-  },
-  {
-    id: 'vid-modern-medical-doctor',
-    title: 'The Modern Doctor: Clinical Rounds & Robotic Surgery',
-    degreeCategory: 'Healthcare & Medicine',
-    durationSeconds: 245, // 4:05
-    durationFormatted: '4:05',
-    speaker: 'Dr. Sarah Al-Mansoor, MD',
-    speakerRole: 'Attending Physician & Robotic Surgery Specialist',
-    thumbnail: medicalDoctorImg,
-    youtubeId: 'U0zf9SEavmw',
-    youtubeEmbedUrl: 'https://www.youtube.com/embed/U0zf9SEavmw',
-    summary: 'A 4-minute clinical walkthrough showing what contemporary medicine looks like with computer-assisted surgery, rapid biometrics, and bedside empathy.',
-    chapters: [
-      { time: '0:00', title: 'Morning Triage & ICU Telemetry' },
-      { time: '1:12', title: 'Operating Room: Minimally Invasive Robotics' },
-      { time: '2:30', title: 'The Human Connection Behind the Data' },
-      { time: '3:25', title: 'Navigating the Medical Training Odyssey' }
-    ],
-    takeaways: [
-      'Medical practice is being augmented by AI diagnostics, but physical bedside diagnosis and surgical dexterity remain irreplaceable.',
-      'Residency is intense; developing emotional resilience and structured clinical reasoning early is paramount.',
-      'Interdisciplinary physicians who understand bio-technology are leading next-generation clinical trials.'
-    ],
-    transcriptExcerpt: "At 6:30 AM, our team gathers around digital telemetry screens reviewing arterial oxygen saturations and organ function trends. While machines alert us to subtle abnormalities, it is human clinical intuition and diagnostic synthesis that saves lives in the golden hour..."
-  },
-  {
-    id: 'vid-cloud-infra-secrets',
-    title: 'Cloud Architecture in 3 Minutes: What Every Engineer Must Know',
-    degreeCategory: 'Information Technology',
-    durationSeconds: 215, // 3:35
-    durationFormatted: '3:35',
-    speaker: 'Priya Raman',
-    speakerRole: 'Principal Cloud Architect, Global SRE',
-    thumbnail: heroImg,
-    youtubeId: 'Y-Jhlwy2sW4',
-    youtubeEmbedUrl: 'https://www.youtube.com/embed/Y-Jhlwy2sW4',
-    summary: 'Learn the 4 core pillars of enterprise cloud engineering: elasticity, observability, failure isolation, and zero-trust security.',
-    chapters: [
-      { time: '0:00', title: 'Why Monoliths Fail at Scale' },
-      { time: '1:10', title: 'Kubernetes & Container Mesh' },
-      { time: '2:15', title: 'Multi-Region High Availability' },
-      { time: '3:00', title: 'The Essential SRE Skillset' }
-    ],
-    takeaways: [
-      'Building in the cloud is about designing for inevitable hardware failure.',
-      'Observability (metrics, logs, traces) separates junior developers from senior infrastructure leaders.',
-      'Understanding networking protocols (BGP, DNS, TLS, TCP) is the bedrock of IT engineering.'
-    ],
-    transcriptExcerpt: "When a service handles half a million requests per second, things will break every hour. Your architecture must heal itself automatically through health-checks, circuit breakers, and distributed queues. Here is how modern IT architects design for high resilience..."
-  },
-  {
     id: 'vid-embedded-robotics',
+    degreeId: 'computer-engineering',
     title: 'Embedded Systems: How Code Moves Physical Machines',
     degreeCategory: 'Computer Engineering',
     durationSeconds: 232, // 3:52
@@ -447,8 +376,143 @@ export const CURATED_VIDEOS: VideoBrief[] = [
     transcriptExcerpt: "Unlike web servers where a laggy response just spins a loader icon, an embedded robotic system controlling high-torque servo motors will collide if a calculation is delayed by even two clock cycles. Here is what makes embedded firmware so exhilarating..."
   },
   {
+    id: 'vid-comp-eng-aspects',
+    degreeId: 'computer-engineering',
+    title: 'Exploring Core Facets of Computer Engineering',
+    degreeCategory: 'Computer Engineering',
+    durationSeconds: 240, // 4:00
+    durationFormatted: '4:00',
+    speaker: 'Dr. Lucas Bauer',
+    speakerRole: 'Processor Design Fellow, Microarchitecture Lab',
+    thumbnail: compEngImg,
+    youtubeId: 'rSwccGiWwO4',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/rSwccGiWwO4',
+    summary: 'A 4-minute overview covering computer architecture, FPGA hardware emulation, low-level system software, and semiconductor physics.',
+    chapters: [
+      { time: '0:00', title: 'The Hardware-Software Interface' },
+      { time: '1:10', title: 'Circuit Design to Microcode' },
+      { time: '2:25', title: 'High-Throughput Interconnects' },
+      { time: '3:15', title: 'Career Trajectories in Silicon' }
+    ],
+    takeaways: [
+      'Computer engineering operates directly at the physical boundary where software abstractions meet silicon voltage.',
+      'Understanding cache hierarchies and memory consistency models is fundamental for high-performance computing.',
+      'Specializing in hardware description languages (HDLs) opens doors to elite semiconductor and aerospace design teams.'
+    ],
+    transcriptExcerpt: "Computer engineering is uniquely positioned because you cannot hide behind an operating system abstraction when designing hardware. In this 4-minute briefing, we explore the essential foundational pillars that every student entering the discipline must master..."
+  },
+
+  // Information Technology Videos
+  {
+    id: 'vid-cloud-infra-secrets',
+    degreeId: 'it-software-engineering',
+    title: 'Cloud Architecture in 3 Minutes: Enterprise Cloud & Networks',
+    degreeCategory: 'Information Technology',
+    durationSeconds: 215, // 3:35
+    durationFormatted: '3:35',
+    speaker: 'Priya Raman',
+    speakerRole: 'Principal Cloud Architect, Global SRE',
+    thumbnail: itSoftwareImg,
+    youtubeId: 'Y-Jhlwy2sW4',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/Y-Jhlwy2sW4',
+    summary: 'Learn the core pillars of enterprise cloud engineering: elasticity, observability, failure isolation, and distributed networking.',
+    chapters: [
+      { time: '0:00', title: 'Why Monoliths Fail at Scale' },
+      { time: '1:10', title: 'Kubernetes & Container Mesh' },
+      { time: '2:15', title: 'Multi-Region High Availability' },
+      { time: '3:00', title: 'The Essential SRE Skillset' }
+    ],
+    takeaways: [
+      'Building in the cloud is about designing for inevitable hardware failure.',
+      'Observability (metrics, logs, traces) separates junior developers from senior infrastructure leaders.',
+      'Understanding networking protocols (BGP, DNS, TLS, TCP) is the bedrock of IT engineering.'
+    ],
+    transcriptExcerpt: "When a service handles half a million requests per second, things will break every hour. Your architecture must heal itself automatically through health-checks, circuit breakers, and distributed queues. Here is how modern IT architects design for high resilience..."
+  },
+  {
+    id: 'vid-it-vs-computer-eng',
+    degreeId: 'it-software-engineering',
+    title: 'IT & Software vs Computer Engineering: Choosing Your Major',
+    degreeCategory: 'Information Technology',
+    durationSeconds: 198, // 3:18
+    durationFormatted: '3:18',
+    speaker: 'Marcus Sterling',
+    speakerRole: 'VP of Infrastructure & Systems Engineering',
+    thumbnail: itSoftwareImg,
+    youtubeId: 'eGX_42qSofc',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/eGX_42qSofc',
+    summary: 'Clear 3-minute comparison distinguishing low-level hardware/firmware computer engineering from high-scale cloud and distributed IT systems.',
+    chapters: [
+      { time: '0:00', title: 'The Core Mental Model Difference' },
+      { time: '1:05', title: 'The Daily Work: Chips vs Clusters' },
+      { time: '2:15', title: 'Career Trajectories & Comp Curves' },
+      { time: '2:50', title: 'How to Decide Your Major' }
+    ],
+    takeaways: [
+      'Choose Computer Engineering if you love physical hardware, physics, circuits, and low-level firmware.',
+      'Choose IT / Software Engineering if you love cloud architecture, distributed microservices, databases, and rapid shipping.',
+      'Both fields intersect at edge computing and hardware acceleration platforms.'
+    ],
+    transcriptExcerpt: "Students frequently ask: 'Should I study Computer Engineering or IT and Software Systems?' The simple test is whether you want to manipulate physical voltage and silicon registers, or orchestrate global distributed fleets serving millions of concurrent web sockets..."
+  },
+  {
+    id: 'vid-cybersecurity-fundamentals',
+    degreeId: 'it-software-engineering',
+    title: 'Cybersecurity & Enterprise Infrastructure Defense',
+    degreeCategory: 'Information Technology',
+    durationSeconds: 210, // 3:30
+    durationFormatted: '3:30',
+    speaker: 'Ravish Sharma',
+    speakerRole: 'Senior Security Operations Lead, CyberDefense',
+    thumbnail: itSoftwareImg,
+    youtubeId: 'xqKw7qsOc1Q',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/xqKw7qsOc1Q',
+    summary: 'An executive 3-minute briefing on the CIA security triad, threat surface reduction, enterprise firewall topology, and cloud vulnerability prevention.',
+    chapters: [
+      { time: '0:00', title: 'What is Modern Cybersecurity?' },
+      { time: '0:55', title: 'The CIA Triad Explained' },
+      { time: '1:50', title: 'Top Enterprise Attack Vectors' },
+      { time: '2:40', title: 'Essential Cyber Engineering Certifications' }
+    ],
+    takeaways: [
+      'Cybersecurity is an active engineering discipline involving threat modeling, identity lifecycle, and zero-trust policies.',
+      'Over 80% of enterprise intrusions exploit configuration drift and unpatched perimeter nodes.',
+      'Hands-on network analysis (Wireshark, Nmap, SIEM alerts) is vital for IT security professionals.'
+    ],
+    transcriptExcerpt: "Cybersecurity is no longer just about firewalls; it is about building resilient zero-trust environments where every identity and API call is continuously verified and monitored..."
+  },
+
+  // Medicine & Healthcare Videos
+  {
+    id: 'vid-modern-medical-doctor',
+    degreeId: 'medicine-doctor',
+    title: 'The Modern Doctor: Clinical Rounds & Robotic Surgery',
+    degreeCategory: 'Healthcare & Medicine',
+    durationSeconds: 245, // 4:05
+    durationFormatted: '4:05',
+    speaker: 'Dr. Sarah Al-Mansoor, MD',
+    speakerRole: 'Attending Physician & Robotic Surgery Specialist',
+    thumbnail: medicalDoctorImg,
+    youtubeId: 'U0zf9SEavmw',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/U0zf9SEavmw',
+    summary: 'A 4-minute clinical walkthrough showing what contemporary medicine looks like with computer-assisted surgery, rapid biometrics, and bedside empathy.',
+    chapters: [
+      { time: '0:00', title: 'Morning Triage & ICU Telemetry' },
+      { time: '1:12', title: 'Operating Room: Minimally Invasive Robotics' },
+      { time: '2:30', title: 'The Human Connection Behind the Data' },
+      { time: '3:25', title: 'Navigating the Medical Training Odyssey' }
+    ],
+    takeaways: [
+      'Medical practice is being augmented by AI diagnostics, but physical bedside diagnosis and surgical dexterity remain irreplaceable.',
+      'Residency is intense; developing emotional resilience and structured clinical reasoning early is paramount.',
+      'Interdisciplinary physicians who understand bio-technology are leading next-generation clinical trials.'
+    ],
+    transcriptExcerpt: "At 6:30 AM, our team gathers around digital telemetry screens reviewing arterial oxygen saturations and organ function trends. While machines alert us to subtle abnormalities, it is human clinical intuition and diagnostic synthesis that saves lives in the golden hour..."
+  },
+  {
     id: 'vid-medical-residency-strategy',
-    title: 'Surviving & Excelling in Medical School and Residency',
+    degreeId: 'medicine-doctor',
+    title: 'So You Want to Be a DOCTOR: Clinical Education & Training',
     degreeCategory: 'Healthcare & Medicine',
     durationSeconds: 208, // 3:28
     durationFormatted: '3:28',
@@ -470,8 +534,66 @@ export const CURATED_VIDEOS: VideoBrief[] = [
       'Define non-negotiable sleep and nutrition boundaries during clinical rotations.'
     ],
     transcriptExcerpt: "Medical school is often described as drinking from a firehose. The secret isn't studying 18 hours a day; it's active retrieval, case synthesis, and understanding the physiological mechanisms behind symptoms so you never have to memorize isolated facts..."
+  },
+  {
+    id: 'vid-doctor-hospital-rounds',
+    degreeId: 'medicine-doctor',
+    title: 'Day in the Life of a Doctor in the Hospital',
+    degreeCategory: 'Healthcare & Medicine',
+    durationSeconds: 240, // 4:00
+    durationFormatted: '4:00',
+    speaker: 'Dr. S. Jenkins, MD',
+    speakerRole: 'Internal Medicine Attending & Clinical Instructor',
+    thumbnail: medicalDoctorImg,
+    youtubeId: 'jMx_PzBlg5g',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/jMx_PzBlg5g',
+    summary: 'A vivid 4-minute hospital experience examining morning handovers, multidisciplinary team consultations, patient examinations, and bedside interventions.',
+    chapters: [
+      { time: '0:00', title: 'Morning Handover & Code Triage' },
+      { time: '1:15', title: 'Bedside Diagnosis & Biometric Review' },
+      { time: '2:20', title: 'Multidisciplinary Treatment Plans' },
+      { time: '3:15', title: 'Reflections on the Medical Profession' }
+    ],
+    takeaways: [
+      'A great doctor treats not merely disease symptoms, but the complete human being and their emotional context.',
+      'Clinical diagnostic accuracy relies on active listening and disciplined physical examination.',
+      'Collaboration between physicians, nurses, pharmacists, and physical therapists is crucial for patient recovery.'
+    ],
+    transcriptExcerpt: "Walking into the hospital each morning, you realize that every patient has placed their trust in your diagnostic acumen. Here is an authentic look at what rounds, acute care decisions, and clinical practice really involve..."
+  },
+
+  // Data Science & AI Videos
+  {
+    id: 'vid-data-science-ai-intro',
+    degreeId: 'data-science-ai',
+    title: 'What is Data Science & Machine Learning? Real-World AI',
+    degreeCategory: 'Data & AI',
+    durationSeconds: 235, // 3:55
+    durationFormatted: '3:55',
+    speaker: 'Martin Keen',
+    speakerRole: 'Principal AI Technologist, IBM Technology',
+    thumbnail: heroImg,
+    youtubeId: 'RBSUwFGa6Fk',
+    youtubeEmbedUrl: 'https://www.youtube.com/embed/RBSUwFGa6Fk',
+    summary: 'Understand how modern data scientists merge statistical inference, computational mathematics, and neural architectures to extract predictive insight.',
+    chapters: [
+      { time: '0:00', title: 'The Data Science Venn Diagram' },
+      { time: '1:10', title: 'Data Cleaning & Feature Engineering' },
+      { time: '2:20', title: 'From Machine Learning to Deep Learning' },
+      { time: '3:15', title: 'Careers & Business Impact' }
+    ],
+    takeaways: [
+      'Data science sits at the exact intersection of statistics, computer programming, and domain business expertise.',
+      'Over 70% of real-world AI work revolves around data curation, anomaly cleaning, and reliable pipeline design.',
+      'Mastering Python, SQL, and linear algebra fundamentals is more durable than chasing fleeting model frameworks.'
+    ],
+    transcriptExcerpt: "Data science is not just writing code or importing machine learning libraries. It is formulating hypotheses, validating statistical significance, and engineering systems that turn raw telemetry into actionable intelligence..."
   }
 ];
+
+export const getVideosForDegree = (degreeId: string): VideoBrief[] => {
+  return CURATED_VIDEOS.filter((v) => v.degreeId === degreeId);
+};
 
 export const ASSESSMENT_QUESTIONS: AssessmentQuestion[] = [
   {

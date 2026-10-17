@@ -13,6 +13,7 @@ import { CheckCircle2 } from 'lucide-react';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState<string>('hero');
+  const [selectedDegreeId, setSelectedDegreeId] = useState<string>('computer-engineering');
   const [selectedVideo, setSelectedVideo] = useState<VideoBrief | null>(null);
   const [selectedDegreeForRoadmap, setSelectedDegreeForRoadmap] = useState<DegreePath | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -42,6 +43,7 @@ export default function App() {
   };
 
   const handleSelectDegreeForRoadmap = (degree: DegreePath) => {
+    setSelectedDegreeId(degree.id);
     setSelectedDegreeForRoadmap(degree);
     scrollToSection('roadmap');
     showToast(`Imported ${degree.name} curriculum milestones into your Growth Roadmap!`);
@@ -83,14 +85,19 @@ export default function App() {
 
         {/* Module 2: Trending Degrees (Computer Engineering, IT Engineering, Doctors, AI) */}
         <TrendingDegrees
+          selectedDegreeId={selectedDegreeId}
+          onSelectDegreeId={setSelectedDegreeId}
           onSelectDegreeForRoadmap={handleSelectDegreeForRoadmap}
+          onSelectVideo={(video) => setSelectedVideo(video)}
         />
 
         {/* Module 3: Industry Trends & Compensation Curves */}
         <IndustryTrends />
 
-        {/* Module 4: Curated 3 to 4-Minute Videos */}
+        {/* Module 4: Curated 3 to 4-Minute Videos (Dynamically Linked to Selected Degree) */}
         <CuratedVideos
+          selectedDegreeId={selectedDegreeId}
+          onSelectDegreeId={setSelectedDegreeId}
           onSelectVideo={(video) => setSelectedVideo(video)}
         />
 
